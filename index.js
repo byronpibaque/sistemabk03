@@ -22,7 +22,7 @@ mongoose.connect(dbUrl, {useCreateIndex:true, useNewUrlParser: true,useUnifiedTo
 
 const app=express();
 
-
+ 
 app.use(morgan('dev'));
 app.use(cors());
 

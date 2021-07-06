@@ -31,7 +31,7 @@ async function aumentarStock(idarticulo, cantidad, fracciones) {//PARA ANULAR FA
 
 }
 
-async function disminuirStock(idarticulo, cantidad, fracciones) {//PARA GENERAR VENTA
+async function disminuirStock(idarticulo, cantidad, fracciones) {
 
     let { fraccionesTotales, fraccionCaja } = await models.Producto.findOne({ _id: idarticulo });
 
@@ -753,7 +753,7 @@ export default {
                                 'precioUni': x.precioUni,
                                 'descuento': x.descuento,
                                 'numComprobante':element.numComprobante,
-                                'codgioPersona':element.codgioPersona.nombres,
+                                'codgioPersona':element.codgioPersona,
                                 'total':element.total,
                                 'estado':element.estado,
                                 'fecha':element.createdAt,
