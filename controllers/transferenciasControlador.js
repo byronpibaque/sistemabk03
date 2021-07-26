@@ -98,8 +98,34 @@ export default {
             });
             next(e);
         }
+    },  
+    listE: async (req, res, next) => {
+        try {
+
+            let codigoFarmacia = req.query.codigoFarmaciaE;
+            Transferencias.find({ $and: [{ 'codigoFarmaciaE':codigoFarmacia}] })
+            .populate([
+                { path: 'codigoFarmaciaE', model: 'detallefarmacias', select: 'descripcion' },
+                { path: 'codigoFarmaciaR', model: 'detallefarmacias', select: 'descripcion' },
+                { path: 'codigoUsuario', model: 'usuarios' },
+                { path: 'detalles._id', model: 'productos' },
+                { path: 'codigoPersona', model: 'persona' }])
+                .exec(function (err, Transferencias) {
+                    
+                    if (err) throw res.status(500).send({
+                        message: 'Ocurrió un error: ' + err
+                    });
+                    if (Transferencias) {
+                        res.status(200).send(Transferencias);
+                    }
+                })
+        } catch (e) {
+            res.status(500).send({
+                message: 'Ocurrió un error'
+            });
+            next(e);
+        }
     },
-    
     activate: async (req, res, next) => {
         try {
             const reg = await models.Transferencias.findByIdAndUpdate({ _id: req.body._id }, { estado: 1 });
@@ -109,6 +135,17 @@ export default {
         } catch (e) {
             res.status(500).send({
                 message: 'Ocurrió un error'
+            });
+            next(e);
+        }
+    },
+    remove: async (req,res,next) => {
+        try {
+            const reg = await models.Transferencias.findByIdAndDelete({_id:req.query._id});
+            res.status(200).json(reg);
+        } catch(e){
+            res.status(500).send({
+                message:'Ocurrió un error al intentar eliminar el Rol.'
             });
             next(e);
         }
