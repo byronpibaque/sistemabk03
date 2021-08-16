@@ -16,7 +16,7 @@ export default {
             });
             next(e);
         }
-    },
+    },  
     query: async (req,res,next) => {
         try {
             const reg=await  models.Arqueos.findOne({_id:req.query._id});
