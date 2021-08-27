@@ -1,7 +1,7 @@
 import { parseZone } from 'moment';
 import models from '../models';
 import Venta from '../models/ventas';
-import mongoose from 'mongoose';
+import mongoose, { model } from 'mongoose';
 import moment from "moment";
 
 
@@ -766,6 +766,95 @@ export default {
                     }
                 })
 
+        } catch (e) {
+            res.status(500).send({
+                message: 'Ocurrió un error'+e
+            });
+            next(e);
+        }
+    },
+    ReporteVentaDetalle:async (req,res,next)=>{
+        try {
+
+            let codigoFarmacia = req.query.codigoFarmacia
+            let codigoUsuario = req.query.codigoUsuario
+            let finicio = req.query.fechaInicio
+            let ffin = req.query.fechaFin
+
+            let arri = []
+            
+            let data=[]
+            let cont=0
+            let total=0
+            let timp=0
+            let val=0
+            const ObjectId1 = mongoose.Types.ObjectId;
+
+           
+            Venta.find({
+                $and: [
+                    { estado: 1 },
+                    { 'codigoFarmacia': codigoFarmacia },
+                    { createdAt: { "$gte": finicio, "$lt": ffin } }
+                ]
+            })
+                .populate([
+                    { path: 'codigoTipoComprobante', model: 'tipocomprobante', select: 'descripcion' },
+                    { path: 'codigoFarmacia', model: 'detallefarmacias', select: 'descripcion' },
+                    { path: 'codigoUsuario', model: 'usuarios', select: 'nombres' },
+                    { path: 'codgioPersona', model: 'persona' }])
+                .exec(function (err, Venta) {
+                   
+                    if (err) throw res.status(500).send({
+                        message: 'Ocurrió un error: ' + err
+                    });
+                    if (Venta) {
+                   
+                       Venta.forEach(element => {
+                     
+                          element.detalles.forEach(x => {
+                            if(parseInt(x.cantidad)){
+                                if(parseInt(x.iva)){
+                                    cont+=((parseInt(x.cantidad)*parseFloat(x.precioVenta)*0.12)+(parseInt(x.cantidad)*parseFloat(x.precioVenta)))-
+                                    ((parseInt(x.cantidad)*parseFloat(x.precioVenta))*parseFloat(x.descuento)/100) 
+                                }else{
+                                    cont+=(parseInt(x.cantidad)*parseFloat(x.precioVenta))-
+                                    ((parseInt(x.cantidad)*parseFloat(x.precioVenta))*parseFloat(x.descuento)/100)
+                                }
+                            }else if(parseInt(x.fracciones)){
+                                if(parseInt(x.iva)){
+                                    cont+=((parseInt(x.fracciones)*parseFloat(x.precioUni)*0.12)+(parseInt(x.fracciones)*parseFloat(x.precioUni)))-
+                                    ((parseInt(x.fracciones)*parseFloat(x.precioUni))*parseFloat(x.descuento)/100)
+                                }else{
+                                    cont+=(parseInt(x.fracciones)*parseFloat(x.precioUni))-
+                                    ((parseInt(x.fracciones)*parseFloat(x.precioUni))*parseFloat(x.descuento)/100)
+                                }
+                            }
+                           }); 
+                          
+                      
+                       });
+                   
+                     
+                    //    data.push({ 
+                    //        'totalV':cont,
+                    //         'totalN':val
+                    //     })
+                    //    res.status(200).json(data);
+                    }
+                })
+                Venta.find({
+                    $and: [
+                        { estado: 1 },
+                        { 'codigoFarmacia': codigoFarmacia },
+                        { createdAt: { "$gte": finicio, "$lt": ffin } }
+                    ]
+               })
+               .forEach(function (data) {
+                   console.log(data);
+               })
+              
+           
         } catch (e) {
             res.status(500).send({
                 message: 'Ocurrió un error'+e

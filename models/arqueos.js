@@ -21,4 +21,4 @@ const arqueosSquema = new Schema({
 
 const Arqueos = mongoose.model('arqueos',arqueosSquema);
 
-export default Arqueos;
+export default Arqueos; 

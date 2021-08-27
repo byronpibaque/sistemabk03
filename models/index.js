@@ -18,7 +18,9 @@ import Egresos from './egresos'
 import Ubicacion from './Ubicacion'
 import Transferencias from './transferenciasPtoP'
 import Cupo from './cupo'
+import caja from './caja'
 export default {
+    caja,
     Farmacias,
     Rol,
     TipoDocumento,

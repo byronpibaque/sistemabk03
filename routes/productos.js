@@ -38,5 +38,6 @@ router.get('/clonar',productosControl.clonado);
 router.delete('/eliminar',productosControl.eliminado);
 router.put('/descuentos',productosControl.descuentos);
 router.put('/descuentosA',productosControl.descuentosAdmin);
+router.put('/actualizarInf',productosControl.Actualizaciones);
 
 export default router; 

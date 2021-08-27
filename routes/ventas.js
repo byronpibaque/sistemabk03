@@ -31,6 +31,7 @@ router.get('/graficomasvende',ventasControl.graficoMasVende);
 router.get('/consultaFechas',ventasControl.consultaFechas);
 router.get('/reporteV',ventasControl.ReporteVentas);
 router.get('/contarventas',ventasControl.contarVentas); 
+router.get('/reporteVDT',ventasControl.ReporteVentaDetalle);
 router.get('/reporteVD',ventasControl.ReporteVentaDetalles);
 router.get('/reporte',ventasControl.reportes)
-export default router;   
+export default router;    

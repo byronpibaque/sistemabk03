@@ -13,6 +13,22 @@ async function actualizardescuentoporproducto(id,descuento){
         {descuento:descuento}
         )
 }
+async function actualizarParametrosProductos(id,nombre,nombreComercial,pvp,costo,punit,desc,idLab,idCat,idPre) {
+    const reg = await models.Producto.findByIdAndUpdate(
+        { _id: id },
+        {   
+            nombre:nombre,
+            nombreComercial:nombreComercial,
+            costoNeto:costo,
+            pvp:pvp,
+            precioUni:punit,
+            descuento:desc,
+            codigoLaboratorio:idLab,
+            codigoCategoria:idCat,
+            codigoPresentacion:idPre
+        }
+        )
+}
 export default {
     add: async (req,res,next) =>{
         try {
@@ -800,7 +816,7 @@ export default {
                 let descuento = req.body.descuento
                 
                 productos.forEach(element => {
-                        console.log(element._id);
+                       
                    actualizardescuentoporproducto(element._id,descuento)
                 });
 
@@ -995,5 +1011,39 @@ export default {
             });
             next(e);
         }
+    }, 
+    Actualizaciones:async(req,res,next)=>{
+        try {
+
+           
+        
+                let productos = req.body.productos
+                let nombre = req.body.nombre
+                let nombreComercial = req.body.nombreComercial
+                let codigoCategoria = req.body.codigoCategoria
+                let codigoLaboratorio = req.body.codigoLaboratorio
+                let codigoPresentacion = req.body.codigoPresentacion
+                let costo = req.body.costo
+                let pvp = req.body.pvp
+                let punit = req.body.punit
+                let descuento = req.body.descuento
+                
+                 
+                   actualizarParametrosProductos(productos,nombre,nombreComercial,pvp,costo,punit,descuento,codigoLaboratorio,codigoCategoria,codigoPresentacion)
+              
+
+                    res.status(200).send({message:"INFORMACION ACUALIZADO"})
+
+
+            
+
+        } catch (error) {
+            res.status(500).send({
+                message:error
+            });
+        }
+
+
+
     },
 }
