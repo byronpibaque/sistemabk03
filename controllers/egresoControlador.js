@@ -303,7 +303,7 @@ export default {
             let valor=req.query.valor;
             let finicio=req.query.fechainicio; 
             let ffin=req.query.fechafin;
-            Egreso.find({$and:[{'codigoFarmacia':valor},{createdAt:{"$gte":new Date(finicio), "$lt":new Date(ffin)}}]})
+            Egreso.find({$and:[{'codigoInventarioE':valor},{createdAt:{"$gte":new Date(finicio), "$lt":new Date(ffin)}}]})
             .populate([
                 {path:'codigoUsuario', model:'usuarios',select:'nombres'},
                 {path:'codigoInventarioE', model:'inventarios'},
