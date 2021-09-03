@@ -33,5 +33,6 @@ router.get('/reporteV',ventasControl.ReporteVentas);
 router.get('/contarventas',ventasControl.contarVentas); 
 router.get('/reporteVDT',ventasControl.ReporteVentaDetalle);
 router.get('/reporteVD',ventasControl.ReporteVentaDetalles);
+router.get('/reporteVDA',ventasControl.ReporteVentaDetallesAdministrativo);
 router.get('/reporte',ventasControl.reportes)
 export default router;    

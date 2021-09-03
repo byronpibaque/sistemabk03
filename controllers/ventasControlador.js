@@ -740,7 +740,67 @@ export default {
                     if (Venta) {
 
                        Venta.forEach(element => {
+ 
+                          element.detalles.forEach(x => {
+                              arri.push({
+                                '_id': x._id,
+                                'codigoInventario': x.codigoInventario,
+                                'producto': x.producto,
+                                'cantidad': x.cantidad,
+                                'iva': x.iva,
+                                'fracciones': x.fracciones,
+                                'precioVenta': x.precioVenta,
+                                'precioUni': x.precioUni,
+                                'descuento': x.descuento,
+                                'numComprobante':element.numComprobante,
+                                'codgioPersona':element.codgioPersona,
+                                'total':element.total,
+                                'estado':element.estado,
+                                'fecha':element.createdAt,
+                                'formapago':element.formapago
+                              })
+                          });
+                       });
 
+                        res.status(200).send(arri);
+                    }
+                })
+
+        } catch (e) {
+            res.status(500).send({
+                message: 'Ocurrió un error'+e
+            });
+            next(e);
+        }
+    },
+    ReporteVentaDetallesAdministrativo:async (req,res,next)=>{
+        try {
+
+            let codigoFarmacia = req.query.codigoFarmacia
+            let codigoUsuario = req.query.codigoUsuario
+            let finicio = req.query.fechaInicio
+            let ffin = req.query.fechaFin
+
+            let arri = []
+            Venta.find({
+                $and: [
+                    { 'codigoFarmacia': codigoFarmacia },
+                    { createdAt: { "$gte": finicio, "$lt": ffin } }
+                ]
+            })
+                .populate([
+                    { path: 'codigoTipoComprobante', model: 'tipocomprobante', select: 'descripcion' },
+                    { path: 'codigoFarmacia', model: 'detallefarmacias', select: 'descripcion' },
+                    { path: 'codigoUsuario', model: 'usuarios', select: 'nombres' },
+                    { path: 'codgioPersona', model: 'persona' }])
+                .exec(function (err, Venta) {
+                    if (err) throw res.status(500).send({
+                        message: 'Ocurrió un error: ' + err
+                    });
+                    if (Venta) {
+
+                       Venta.forEach(element => {
+ 
                           element.detalles.forEach(x => {
                               arri.push({
                                 '_id': x._id,
