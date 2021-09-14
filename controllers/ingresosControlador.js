@@ -1,5 +1,6 @@
 import models from '../models';
 import Ingreso from '../models/ingresos';
+import mongoose, { model } from 'mongoose';
 
 async function aumentarStock(idarticulo,cantidad,fracciones){
     let {fraccionesTotales}=await models.Producto.findOne({_id:idarticulo});//FRACCIONES TOTALES DE PRODUCTOS
@@ -133,6 +134,34 @@ export default {
             next(e);
         }
     },
+    listFiltro: async (req,res,next) => {
+        try {
+            const moment = require('moment')
+            const today = moment().startOf('day');
+            let valor=req.query.valor;
+         
+            Ingreso.find({$or:[{'codigoFarmacia':valor}]})
+            .populate([
+                {path:'codigoTipoComprobante', model:'tipocomprobante',select:'descripcion'},
+                {path:'codigoFarmacia', model:'detallefarmacias',select:'descripcion'},
+                {path:'codigoUsuario', model:'usuarios',select:'nombres'},
+                {path:'codgioPersona', model:'persona',select:'nombres'}])
+                .sort({createdAt:-1})
+            .exec(function (err,Venta) {
+                if(err)throw  res.status(500).send({
+                                message:'Ocurrió un error: '+err
+                             });
+                if(Venta){
+                 res.status(200).send(Venta);    
+                }  
+            })
+        } catch(e){
+            res.status(500).send({
+                message:'Ocurrió un error'
+            });
+            next(e);
+        }
+    },
     list: async (req,res,next) => {
         try {
            
@@ -244,6 +273,48 @@ export default {
             });
             next(e);
         }
+    },
+    reportetotal:async(req,res,next) =>{
+        try {
+            const ObjectId1 = mongoose.Types.ObjectId;
+            let Finicio = req.query.start;
+            let Ffin = req.query.end;
+
+                const reg = await models.Ingreso.aggregate(
+                [
+                    { $match:
+                     { $and: [
+                         { estado: 1 },
+                      //   {codigoFarmacia:ObjectId1(cdf)},
+                         { createdAt: { "$gte": new Date(Finicio), "$lt": new Date(Ffin) } }
+                        ] }
+                     },
+                    {
+                        $group:{
+                            _id: {
+                                codigoFarmacia: "$codigoFarmacia"
+                            },
+                            total: { $sum: "$total" },
+                        }
+                    },
+                    {
+                        $sort: {
+                            "_id.codigoFarmacia": 1
+                        }
+                    }
+                  
+                ]
+                ) 
+                await models.Farmacia.populate(reg,{path:"_id.codigoFarmacia",select:{descripcion:1}})
+               
+
+                res.status(200).json(reg)
+        } catch(e){
+                res.status(500).send({
+                    message:'Ocurrió un error'
+                });
+                next(e);
+         }
     },
     grafico12Meses:async(req,res,next) =>{
         try {

@@ -11,6 +11,8 @@ router.post('/add',ingresosControl.add);
 router.get('/query',ingresosControl.query);
 router.get('/queryHistorial',ingresosControl.queryHistorial);
 router.get('/list',ingresosControl.list);
+router.get('/listfiltrado',ingresosControl.listFiltro);
+router.get('/reporte',ingresosControl.reportetotal);
 router.get('/listtotal',ingresosControl.listtotal); 
 router.get('/listporfechas',ingresosControl.listporFechas);
 router.get('/listporfechasad',ingresosControl.listporFechasAdmin);
