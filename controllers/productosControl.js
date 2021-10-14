@@ -13,7 +13,7 @@ async function actualizardescuentoporproducto(id,descuento){
         {descuento:descuento}
         )
 }
-async function actualizarParametrosProductos(id,nombre,nombreComercial,pvp,costo,punit,desc,idLab,idCat,idPre) {
+async function actualizarParametrosProductos(id,nombre,nombreComercial,pvp,costo,punit,desc,idLab,idCat,idPre,iva,barra) {
     const reg = await models.Producto.findByIdAndUpdate(
         { _id: id },
         {   
@@ -25,7 +25,9 @@ async function actualizarParametrosProductos(id,nombre,nombreComercial,pvp,costo
             descuento:desc,
             codigoLaboratorio:idLab,
             codigoCategoria:idCat,
-            codigoPresentacion:idPre
+            codigoPresentacion:idPre,
+            codigoBarras:barra,
+            iva:iva
         }
         )
 }
@@ -1027,12 +1029,14 @@ export default {
                 let pvp = req.body.pvp
                 let punit = req.body.punit
                 let descuento = req.body.descuento
+                let iva = req.body.codigoIva
+                let barra = req.body.codigoBarras
                 
                  
-                   actualizarParametrosProductos(productos,nombre,nombreComercial,pvp,costo,punit,descuento,codigoLaboratorio,codigoCategoria,codigoPresentacion)
+                   actualizarParametrosProductos(productos,nombre,nombreComercial,pvp,costo,punit,descuento,codigoLaboratorio,codigoCategoria,codigoPresentacion,iva,barra)
               
 
-                    res.status(200).send({message:"INFORMACION ACUALIZADO"})
+                    res.status(200).send({message:"INFORMACION ACUALIZADA"})
 
 
             
