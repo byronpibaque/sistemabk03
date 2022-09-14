@@ -13,8 +13,7 @@ async function aumentarStock(idarticulo, cantidad, fracciones) {//PARA ANULAR FA
    
 
   
-        let nfracionesTotal = parseInt(fraccionesTotales) +
-         ((parseInt(fraccionCaja) * parseInt(cantidad))+parseInt(fracciones))
+        let nfracionesTotal = parseInt(fraccionesTotales) +parseInt(fracciones)
        
         const reg = await models.Producto.findByIdAndUpdate(
             { _id: idarticulo },
@@ -32,8 +31,7 @@ async function disminuirStock(idarticulo, cantidad, fracciones) {//PARA GENERAR 
 
     let { fraccionesTotales, fraccionCaja } = await models.Producto.findOne({ _id: idarticulo });
    
-        let nfracionesTotal = parseInt(fraccionesTotales)-
-        ((parseInt(fraccionCaja) * parseInt(cantidad)) + parseInt(fracciones))
+        let nfracionesTotal = parseInt(fraccionesTotales)-parseInt(fracciones)
        
 
         const reg = await models.Producto.findByIdAndUpdate(
