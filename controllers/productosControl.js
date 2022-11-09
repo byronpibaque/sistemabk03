@@ -223,7 +223,7 @@ export default {
                 {path:'codigoCategoria', model:'categoria',select:'nombre'},
                 {path:'codigoLaboratorio', model:'laboratorio',select:['nombre','abreviatura']},
                 {path:'codigoPresentacion', model:'presentacion',select:'descripcion'},
-                {path:'codigoInventario', model:'inventarios',select:'descripcion'}
+                {path:'codigoInventario', model:'inventarios',select:['descripcion', 'estado']}
             ]).exec(function (err,producto) {
                 if(err)throw  res.status(500).send({
                     message:'Ocurrió un error: '+err
@@ -445,7 +445,7 @@ export default {
             {path:'codigoCategoria', model:'categoria',select:'nombre'},
             {path:'codigoLaboratorio', model:'laboratorio',select:['nombre','abreviatura']},
             {path:'codigoPresentacion', model:'presentacion',select:'descripcion'},
-            {path:'codigoInventario', model:'inventarios',select:'descripcion'}])
+            {path:'codigoInventario', model:'inventarios',select:['descripcion', 'estado']}])
             .sort({"nombreComercial":1})
             .exec(function (err,producto) {
                if(err)throw  res.status(500).send({
