@@ -216,41 +216,32 @@ export default {
     },
     busquedaAvanzadaTodas: async (req,res,next) => {
         try {
-
            let CB = req.query.codigoBarras;
 
-
-           Producto
-           .find(
-            {$and:
-            [
-            {'codigoBarras':CB}
-             ]}
-            )
-           .populate
-           ([
-            {path:'codigoCategoria', model:'categoria',select:'nombre'},
-            {path:'codigoLaboratorio', model:'laboratorio',select:['nombre','abreviatura']},
-            {path:'codigoPresentacion', model:'presentacion',select:'descripcion'},
-            {path:'codigoInventario', model:'inventarios',select:'descripcion'}
-           ])
-            .exec(function (err,producto) {
-               if(err)throw  res.status(500).send({
-                               message:'Ocurrió un error: '+err
-                            });
-               if(producto.length!=0){
-
-                res.status(200).send(producto);
-              }else{
-
-                res.status(204).send({
-                    message:'No hay datos'
+           Producto.find({$and: [{'codigoBarras':CB}]})
+           .populate([
+                {path:'codigoCategoria', model:'categoria',select:'nombre'},
+                {path:'codigoLaboratorio', model:'laboratorio',select:['nombre','abreviatura']},
+                {path:'codigoPresentacion', model:'presentacion',select:'descripcion'},
+                {
+                    path:'codigoInventario', 
+                    match: { estado: true },
+                    model:'inventarios',
+                    select:'descripcion'
+                }
+            ]).exec(function (err,producto) {
+                if(err)throw  res.status(500).send({
+                    message:'Ocurrió un error: '+err
                 });
-              }
-
-           })
-
-        } catch(e){
+                if(producto.length!=0){
+                    res.status(200).send(producto);
+                }else{
+                    res.status(204).send({
+                        message:'No hay datos'
+                    });
+                }
+            })
+        }catch(e){
             res.status(500).send({
                 message:'Ocurrió un error'
             });
@@ -459,8 +450,12 @@ export default {
             {path:'codigoCategoria', model:'categoria',select:'nombre'},
             {path:'codigoLaboratorio', model:'laboratorio',select:['nombre','abreviatura']},
             {path:'codigoPresentacion', model:'presentacion',select:'descripcion'},
-            {path:'codigoInventario', model:'inventarios',select:'descripcion'}])
-            .sort({"nombreComercial":1})
+            {
+                path:'codigoInventario', 
+                match: { estado: true },
+                model:'inventarios',
+                select:'descripcion'
+            }]).sort({"nombreComercial":1})
             .exec(function (err,producto) {
                if(err)throw  res.status(500).send({
                                message:'Ocurrió un error: '+err
