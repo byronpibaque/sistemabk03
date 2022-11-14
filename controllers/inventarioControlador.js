@@ -66,8 +66,12 @@ export default {
     list: async (req,res,next) => {
         try {
            let valor=req.query.valor;
-           Inventario.find({$or:[{'descripcion':new RegExp(valor,'i')}]})
-           .populate([{path:'detalleFarmacia', model:'detallefarmacias',select:'descripcion'}])
+           Inventario.find({
+                $or:[{'descripcion':new RegExp(valor,'i')}],
+                $and: [{ estado: true }]
+            }).populate([
+                { path:'detalleFarmacia', model:'detallefarmacias',select:'descripcion' }
+            ])
            .exec(function (err,usuario) {
                if(err)throw  res.status(500).send({
                                message:'Ocurrió un error: '+err
@@ -77,7 +81,6 @@ export default {
                }
                
            })
-
         } catch(e){
             res.status(500).send({
                 message:'Ocurrió un error'
