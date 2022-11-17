@@ -1,5 +1,6 @@
 import models from '../models';
 import Producto from '../models/productos';
+import Inventario from '../models/inventario';
 async function ObtenerInventario(codigoFarmacia){
     let {_id}=await models.Inventario.findOne({detalleFarmacia:ObjectId(codigoFarmacia)});
 
@@ -33,14 +34,27 @@ async function actualizarParametrosProductos(id,nombre,nombreComercial,pvp,costo
 }
 export default {
     add: async (req,res,next) =>{
-        try {
-            const reg = await models.Producto.create(req.body);
-            res.status(200).json(reg);
-        } catch (e){
-            res.status(500).send({
-                message:'Ocurrió un error'
-            });
-            next(e);
+        const existeProducto = await models.Producto.findOne({ 
+            codigoBarras: req.body.codigoBarras,
+            codigoInventario: req.body.codigoInventario
+        });
+        
+        if (!existeProducto) {
+            try {
+                const reg = await models.Producto.create(req.body);
+                res.status(200).json(reg);
+            } catch (e){
+                res.status(500).send({
+                    message:'Ocurrió un error'
+                });
+                next(e);
+            }
+        }else{
+            const { descripcion } = await models.Inventario.findById(req.body.codigoInventario)
+
+            res.status(301).send({
+                message: descripcion
+            })
         }
     },
     queryA: async (req,res,next) => {

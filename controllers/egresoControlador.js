@@ -7,11 +7,10 @@ function paddy(num, padlen, padchar) {
     var pad = new Array(1 + padlen).join(pad_char);
     return (pad + num).slice(-pad.length);
 }
+
 async function aumentarStock(idarticulo, cantidad, fracciones) {//PARA ANULAR FACTURAS
 
     let { fraccionesTotales, fraccionCaja } = await models.Producto.findOne({ _id: idarticulo });//FRACCIONES TOTALES Y FRACCIONES POR CAJA EN ARTICULOS
-   
-
   
         let nfracionesTotal = parseInt(fraccionesTotales) +parseInt(fracciones)
        
@@ -22,9 +21,6 @@ async function aumentarStock(idarticulo, cantidad, fracciones) {//PARA ANULAR FA
                 fraccionesTotales:nfracionesTotal
 
             });
-   
-
-
 }
 
 async function disminuirStock(idarticulo, cantidad, fracciones) {//PARA GENERAR VENTA
@@ -258,9 +254,9 @@ export default {
     deactivate:async (req,res,next) => {
         try {
             const reg = await models.Egresos.findByIdAndUpdate({_id:req.body._id},{estado:1});
-            //Actualizar stock
-                let codigoInventarioR = reg.codigoInventarioR;
-                let detalles=reg.detalles;
+            //Actualizar stock.
+            let codigoInventarioR = reg.codigoInventarioR;
+            let detalles=reg.detalles;
           
             detalles.map(function(x){
                 disminuirStock(x._id,x.cantidad,x.fracciones);

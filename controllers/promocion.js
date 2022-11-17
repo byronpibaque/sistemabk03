@@ -5,10 +5,10 @@ import cupo from '../models/promocion';
 
 export default {
     add: async (req,res,next) =>{
-        try {
+        try{
             const reg = await cupo.create(req.body);
             res.status(200).json(reg);
-        } catch (e){
+        }catch(e){
             res.status(500).send({
                 message:'Ocurrió un error'
             });
