@@ -290,28 +290,21 @@ export default {
             let cp=req.query.codigoPersona;
             const reg=await cupo.find({$and:[{codigoPersona:cp},{estado:1}]}) 
             .populate([
-                
                 {path:'codigoUsuario', model:'usuarios'},
-                {path:'codigoPersona', model:'persona'},
-              
+                {path:'codigoPersona', model:'persona'}
             ])
             .exec(function (err,Existe) {
                
                 if(err)throw  res.status(500).send({ 
                     message:'Ocurrió un error: '+err
-                    });
+                });
                     
                 if(Object.entries(Existe).length==0){
-                    
                     res.status(204).send({ message:'no existe'}); 
-                    
                 }else{
                     res.status(200).send(Existe);  
-                    
                 }
-            })
-            
-           
+            })           
         } catch(e){ 
             res.status(500).send({
                 message:'Ocurrió un error al intentar buscar.'
