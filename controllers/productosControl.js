@@ -738,20 +738,15 @@ export default {
     },
     verificarExisteCodigoBarra:async (req,res,next)=>{
         try {
-
-
             var CB = req.query.CB
             let codigoInventario = req.query.codigoInventario
             const reg=await  models.Producto
             .find({
-                $and:[
-                    {
+                $and:[{
                         codigoBarras:CB
-                    },
-                    {
+                    },{
                         codigoInventario:codigoInventario
-                    }
-                ]
+                    }]
             })
             .exec(function (err,Existe) {
                 if(err)throw  res.status(500).send({
