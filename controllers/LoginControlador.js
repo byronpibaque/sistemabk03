@@ -183,7 +183,6 @@ export default {
     },
     login:async(req,res,next)=>{
         try {
-        
             let user = await Login.findOne({$or:[{email:req.body.email},{usuario:req.body.email}]});
                 if (user) {
                     if(user.estado==1){
