@@ -257,7 +257,7 @@ export default {
             //Actualizar stock.
             let codigoInventarioR = reg.codigoInventarioR;
             let detalles=reg.detalles;
-          
+         
             detalles.map(function(x){
                 disminuirStock(x._id,x.cantidad,x.fracciones);
             });

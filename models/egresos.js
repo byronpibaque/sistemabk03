@@ -25,8 +25,8 @@ const egresoSchema = new Schema({
         descuento:{
             type:Number,
             required:true
-        }
-       
+        },
+        fraccionesTotales:{type:Number}
     }],
     
     total:{ type:Number, required:true},
