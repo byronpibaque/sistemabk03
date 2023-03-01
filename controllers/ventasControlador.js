@@ -12,39 +12,24 @@ function paddy(num, padlen, padchar) {
 }
 async function aumentarStock(idarticulo, cantidad, fracciones) {//PARA ANULAR FACTURAS
 
-    let { fraccionesTotales, fraccionCaja } = await models.Producto.findOne({ _id: idarticulo });//FRACCIONES TOTALES Y FRACCIONES POR CAJA EN ARTICULOS
-
-
+    let { fraccionesTotales, fraccionCaja } = await models.Producto.findOne({ _id: idarticulo }); //FRACCIONES TOTALES Y FRACCIONES POR CAJA EN ARTICULOS
 
         let nfracionesTotal = parseInt(fraccionesTotales) +
-         ((parseInt(fraccionCaja) * parseInt(cantidad))+parseInt(fracciones))
+         ( (parseInt(fraccionCaja) * parseInt(cantidad) ) + parseInt(fracciones))
 
         const reg = await models.Producto.findByIdAndUpdate(
             { _id: idarticulo },
-            {
-
-                fraccionesTotales:nfracionesTotal
-
-            });
-
-
-
+            { fraccionesTotales:nfracionesTotal});
 }
 
 async function disminuirStock(idarticulo, cantidad, fracciones) {
-
     let { fraccionesTotales, fraccionCaja } = await models.Producto.findOne({ _id: idarticulo });
 
-        let nfracionesTotal = parseInt(fraccionesTotales)-
-        ((parseInt(fraccionCaja) * parseInt(cantidad)) + parseInt(fracciones))
+    let nfracionesTotal = parseInt(fraccionesTotales)-
+    ((parseInt(fraccionCaja) * parseInt(cantidad)) + parseInt(fracciones))
 
-
-        const reg = await models.Producto.findByIdAndUpdate(
-            { _id: idarticulo },
-            {
-                  fraccionesTotales: nfracionesTotal
-            });
-
+    const reg = await models.Producto.findByIdAndUpdate(
+        { _id: idarticulo },{ fraccionesTotales: nfracionesTotal});
 }
 
 async function actualizarCupo(codigoPersona,total){
@@ -68,20 +53,21 @@ async function aumentarCupo(codigoPersona,total){
 
 export default {
     add: async (req, res, next) => {
-        try {
-            const reg = await models.Venta.create(req.body);
-            //Actualizar stock
-            let detalles = req.body.detalles;
-            detalles.map(function (x) {
-                disminuirStock(x._id, x.cantidad, x.fracciones);
-            });
-            res.status(200).json(reg);
-        } catch (e) {
-            res.status(500).send({
-                message: 'Ocurrió un error'
-            });
-            next(e);
-        }
+        res.status(200).json({ message: 'todo ok' });
+        // try {
+        //     const reg = await models.Venta.create(req.body);
+        //     //Actualizar stock
+        //     let detalles = req.body.detalles;
+        //     detalles.map(function (x) {
+        //         disminuirStock(x._id, x.cantidad, x.fracciones);
+        //     });
+        //     res.status(200).json(reg);
+        // } catch (e) {
+        //     res.status(500).send({
+        //         message: 'Ocurrió un error'
+        //     });
+        //     next(e);
+        // }
     },
     query: async (req, res, next) => {
         try {
@@ -476,7 +462,7 @@ export default {
             next(e);
         }
     },
-    deactivate: async (req, res, next) => {
+    deactivate: async (req, res, next) => { //OK
         try {
             const reg = await models.Venta.findByIdAndUpdate({ _id: req.body._id }, { estado: 0 });
             console.log(reg)
@@ -489,7 +475,6 @@ export default {
             let detalles = reg.detalles;
             detalles.map(function (x) {
                 aumentarStock(x._id, x.cantidad, x.fracciones);
-
             });
             res.status(200).json(reg);
         } catch (e) {
@@ -580,13 +565,9 @@ export default {
             const reg = await models.Venta.estimatedDocumentCount(function (err, count) {
                 if (err) return handleError(err);
 
-
                 let contadorEntero = parseInt(count) + 300
                 res.status(200).json(paddy(parseInt(contadorEntero), 9))
-
-
             });
-
 
         } catch (e) {
             res.status(500).send({

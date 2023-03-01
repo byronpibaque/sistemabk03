@@ -64,8 +64,6 @@ export default {
                 }
                 
             })
-
-            
         } catch(e){
             res.status(500).send({
                 message:'Ocurrió un error'

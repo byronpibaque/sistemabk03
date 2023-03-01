@@ -27,8 +27,7 @@ async function disminuirStock(idarticulo,cantidad,fracciones){
         return true
     }).catch((err) => {
         return false
-    });
-    
+    });    
 }
 
 export default {
