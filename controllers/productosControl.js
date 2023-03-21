@@ -900,9 +900,6 @@ export default {
                 message:error
             });
         }
-
-
-
     },
     queryhistorial: async (req,res,next) => {
         try {
@@ -916,7 +913,7 @@ export default {
            {path:'codigoInventario', model:'inventarios',select:'descripcion'}])
            .exec(function (err,producto) {
                if(err)
-               return res.status(500).send({message:'Ocurrió un error: '+err});
+                return res.status(500).send({message:'Ocurrió un error: '+err});
                if(producto){
                    res.status(200).send(producto);
                 }
