@@ -19,6 +19,7 @@ import LoginRouter from './login'
 import XmlRouter from './xml'
 import CtasCobrar from './cuentasporcobrar'
 import serverCorreo from './servercorreo'
+import seguimiento from './seguimiento'
 import pdf from './pdfCreate'
 import expor from './exportToxlsx'
 import arqueo from './arqueo'
@@ -29,8 +30,6 @@ import vademecum from './vademecum'
 import Ubicacion from './ubicacion'
 import Transferencias from './tarnsferencias'
 import Estadisticas from './estadisticas'
-
-
 
 const router=routerx();
 
@@ -48,6 +47,7 @@ router.use('/usuario',usuarioRouter);
 router.use('/farmacia',farmaciaRouter);
 router.use('/inventario',inventarioRouter);
 router.use('/productos',productosRouter);
+router.use('/seguimiento',seguimiento);
 router.use('/ingresos',ingresosRouter);
 router.use('/ventas',ventasRouter);
 router.use('/login',LoginRouter);
