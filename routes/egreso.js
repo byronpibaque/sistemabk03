@@ -4,6 +4,7 @@ import egresoControl from '../controllers/egresoControlador';
 
 
 const router=routerx();
+
   
 
 router.post('/add',egresoControl.emitir);

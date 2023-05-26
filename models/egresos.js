@@ -20,6 +20,7 @@ const egresoSchema = new Schema({
         },
         iva:{
             type:Number,
+            required:true
         },
         descuento:{
             type:Number,

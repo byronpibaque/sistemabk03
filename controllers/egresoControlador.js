@@ -16,8 +16,10 @@ async function aumentarStock(idarticulo, cantidad, fracciones) {//PARA ANULAR FA
        
         const reg = await models.Producto.findByIdAndUpdate(
             { _id: idarticulo },
-            {         
+            {
+         
                 fraccionesTotales:nfracionesTotal
+
             });
 }
 
