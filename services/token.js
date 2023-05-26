@@ -1,6 +1,5 @@
 import jwt from 'jsonwebtoken';
 import Login from '../models/login'
-import Farmacia from '../models/farmacia'
 
 async function checkToken(token){
     let __id = null;
@@ -12,22 +11,16 @@ async function checkToken(token){
     }
     const user = await Login.findOne({_id:__id,estado:1});
     if (user){
-        const empresa = await Farmacia.findOne({_id:user.codigoFarmacia});
         const token = jwt.sign({_id:__id},'clavesecretaparagenerartoken',{expiresIn:'1d'});
-        if(empresa){
-            return {token,rol:user.rol,codigoFarmacia:user.codigoFarmacia,codigoUsuario:user.codigoUsuario,codigoEmpresa:empresa.codigoFarmacias};
-        }else{
-            return {token,rol:user.rol,codigoFarmacia:user.codigoFarmacia,codigoUsuario:user.codigoUsuario,codigoEmpresa:null};
-        }
-        
+        return {token,rol:user.rol,codigoFarmacia:user.codigoFarmacia,codigoUsuario:user.codigoUsuario};
     } else {
         return false;
     }
 }
 
 export default {
-    encode: async (_id,rol,email,codigoFarmacia,codigoUsuario,codigoFarmacias) => {
-        const token = jwt.sign({_id:_id,codigoFarmacia:codigoFarmacia,codigoUsuario:codigoUsuario,rol:rol,email:email,codigoEmpresa:codigoFarmacias},'clavesecretaparagenerartoken',{expiresIn: '1d'});
+    encode: async (_id,rol,email,codigoFarmacia,codigoUsuario) => {
+        const token = jwt.sign({_id:_id,codigoFarmacia:codigoFarmacia,codigoUsuario:codigoUsuario,rol:rol,email:email},'clavesecretaparagenerartoken',{expiresIn: '1d'});
         return token;
     },
     decode: async (token) => {
