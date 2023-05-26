@@ -186,15 +186,32 @@ export default {
             let user = await Login.findOne({$or:[{email:req.body.email},{usuario:req.body.email}]});
                 if (user) {
                     if(user.estado==1){
-                        let match = await bcryptjs.compare(req.body.password, user.password);
-                        if (match){
-                        let tokenReturn = await token.encode(user._id,user.rol,user.email,user.codigoFarmacia,user.codigoUsuario);
-                        res.status(200).json({user,tokenReturn});
-                        
+                       
+                        let codEmpresa=req.body.codigoEmpresa;
+                        if(codEmpresa){
+                            let match = await bcryptjs.compare(req.body.password, user.password);
+                            if (match){
+                                let tokenReturn = await token.encode(user._id,user.rol,user.email,user.codigoFarmacia,user.codigoUsuario,codEmpresa);
+                                res.status(200).json({user,tokenReturn});
+                            }else{
+                                res.status(500).send({
+                                    message:'Clave incorrecta, verifique.'
+                                });
+                            }
                         }else{
-                            res.status(500).send({
-                                message:'Clave incorrecta, verifique.'
-                            });
+                            
+                            const rol = await models.Rol.findOne({_id:user.rol})
+                            if(rol.descripcion=="Administrador"){
+                                let match = await bcryptjs.compare(req.body.password, user.password);
+                                if (match){
+                                    let tokenReturn = await token.encode(user._id,user.rol,user.email,user.codigoFarmacia,user.codigoUsuario,null);
+                                    res.status(200).json({user,tokenReturn});
+                                }else{
+                                    res.status(500).send({
+                                        message:'Clave incorrecta, verifique.'
+                                    });
+                                }
+                            }
                         }
                     }else{
                         res.status(500).send({

@@ -49,7 +49,7 @@ export default {
     list: async (req,res,next) => {
         try {
             let valor=req.query.valor;
-            ctacobrar.find({$or:[{'numComprobante':new RegExp(valor,'i')}]}).populate([
+            ctacobrar.find({$and:[{'estado':1}],$or:[{'numComprobante':new RegExp(valor,'i')}]}).populate([
                 {path:'codigoVenta', model:'ventas'},
                 {path:'codigoUsuario', model:'usuarios',select:'nombres'},
                 {path:'codigoPersona', model:'persona',select:'nombres'},
