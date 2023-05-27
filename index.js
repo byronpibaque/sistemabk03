@@ -18,19 +18,12 @@ const dbUrl = 'mongodb+srv://byron:Byron9009@sistemaventas-crznc.mongodb.net/pun
 mongoose.connect(dbUrl, {useCreateIndex:true, useNewUrlParser: true,useUnifiedTopology: true})
 .then(mongoose => console.log('Conexion satisfactoria con la base de datos.'))
 .catch(err => console.log(err));
-
-
 const app=express();
-
- 
 app.use(morgan('dev'));
 app.use(cors());
-
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(express.static(path.join(__dirname,'public')))
-
-
 if (process.env.NODE_ENV === "production"){
     app.use('/api',router);
     app.set('port',process.env.PORT || 777);
