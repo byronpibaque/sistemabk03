@@ -181,7 +181,7 @@ export default {
             next(e);
         }
     },
-    login:async(req,res,next)=>{
+    login:async(req,res,next) => {
         try {
             let user = await Login.findOne({$or:[{email:req.body.email},{usuario:req.body.email}]});
                 if (user) {
@@ -218,7 +218,6 @@ export default {
                             message:'Usuario inactivo.'
                         });  
                     }
-                    
                     
                 }else{
                     res.status(500).send({
