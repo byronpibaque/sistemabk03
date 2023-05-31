@@ -30,6 +30,7 @@ import vademecum from './vademecum'
 import Ubicacion from './ubicacion'
 import Transferencias from './tarnsferencias'
 import Estadisticas from './estadisticas'
+import infoError from './infoError';
 
 const router=routerx();
 
@@ -63,5 +64,6 @@ router.use('/vademecum',vademecum)
 router.use('/ubicacion',Ubicacion)
 router.use('/transferencias',Transferencias)
 router.use('/estadisticas',Estadisticas)
+router.use('/infoError',infoError)
 
 export default router;

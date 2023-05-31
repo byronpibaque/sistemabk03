@@ -1,4 +1,8 @@
 import models from '../models';
+import factoryData from '../db/factoryData';
+import factoryModel from '../db/factoryModel';
+import rolSchema from '../schemas/infoErrorSchema';
+
 export default {
     add: async (req,res,next) =>{
         try {
@@ -30,9 +34,14 @@ export default {
     },
     list: async (req,res,next) => {
         try {
+
+            let conn =await factoryData.obtenerConexion('puntoventa');
+            let modelo = await factoryModel.obtenerModelo('rol',rolSchema,conn);
+
             let valor=req.query.valor;
-            const reg=await models.Rol.find({$or:[{'descripcion':new RegExp(valor,'i')}]},{createdAt:0})
+            const reg= await modelo.find({$or:[{'descripcion':new RegExp(valor,'i')}]},{createdAt:0})
             .sort({'createdAt':-1});
+    
             res.status(200).json(reg);
         } catch(e){
             res.status(500).send({
