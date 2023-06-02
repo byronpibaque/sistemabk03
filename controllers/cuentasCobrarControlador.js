@@ -305,7 +305,7 @@ export default {
             [ 
                 { $match:
                  { $and: [
-                     { estado: 1 },
+                     { estado: 0 },
                   //   {codigoFarmacia:ObjectId1(cdf)},
                   { createdAt: { "$gte": new Date(Finicio), "$lt":new Date(Ffin) } }
                     ] }
