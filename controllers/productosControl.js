@@ -606,8 +606,8 @@ export default {
             .find({'codigoInventario':codigoI}))
             .forEach(function (doc) {
                 var id = mongoose.Types.ObjectId();
-                doc.stock=0
-                doc.fraccionesTotales=0
+                // doc.stock=0
+                // doc.fraccionesTotales=0
                 doc.codigoInventario=codigoN
                 doc._id=id
 
@@ -617,7 +617,6 @@ export default {
 
               models.Producto.insertMany(BaseDoc)
               .then(function(docs){
-
                 res.status(200).json("OK");
               })
               .catch(function(err){
