@@ -181,41 +181,74 @@ export default {
             next(e);
         }
     },
-    login:async(req,res,next)=>{
+    login:async(req,res,next) => {
         try {
             let user = await Login.findOne({$or:[{email:req.body.email},{usuario:req.body.email}]});
-                if (user) {
+            if(req.body.codigoEmpresa){
+                if(user){
+                    let rol = await models.Rol.findOne({_id:user.rol});
+                    let match = await bcryptjs.compare(req.body.password, user.password);
                     if(user.estado==1){
-                        let match = await bcryptjs.compare(req.body.password, user.password);
+                     if(rol.descripcion=="Administrador"){
                         if (match){
-                        let tokenReturn = await token.encode(user._id,user.rol,user.email,user.codigoFarmacia,user.codigoUsuario);
-                        res.status(200).json({user,tokenReturn});
-                        
+                            let tokenReturn = await token.encode(user._id,user.rol,user.email,user.codigoFarmacia,user.codigoUsuario,null);
+                            res.status(200).json({user,tokenReturn});
                         }else{
                             res.status(500).send({
                                 message:'Clave incorrecta, verifique.'
                             });
                         }
+                        }else{
+                            if (match){
+                                let tokenReturn = await token.encode(user._id,user.rol,user.email,user.codigoFarmacia,user.codigoUsuario,req.body.codigoEmpresa);
+                                res.status(200).json({user,tokenReturn});
+                            }else{
+                                res.status(500).send({
+                                    message:'Clave incorrecta, verifique.'
+                                });
+                            }
+
+                        }
                     }else{
                         res.status(500).send({
                             message:'Usuario inactivo.'
-                        });  
+                        });
                     }
-                    
-                    
+            }else{
+                res.status(500).send({
+                    message:'No se encontro el usuario registrado en la base de datos.'
+                });
+            }
+        }else{
+            if(user){
+                console.log(user);
+                let rol = await models.Rol.findOne({_id:user.rol});
+                let match = await bcryptjs.compare(req.body.password, user.password);
+                if(user.estado==1){
+                 if(rol.descripcion=="Administrador"){
+                    if (match){
+                        let tokenReturn = await token.encode(user._id,user.rol,user.email,user.codigoFarmacia,user.codigoUsuario,null);
+                        res.status(200).json({user,tokenReturn});
+                    }else{
+                        res.status(500).send({
+                            message:'Clave incorrecta, verifique.'
+                        });
+                    }
+                    }
                 }else{
                     res.status(500).send({
-                        message:'Usuario inexistente, verifique.'
+                        message:'Usuario inactivo.'
                     });
                 }
-           
-
-            
-            
-
+        }else{
+            res.status(500).send({
+                message:'No se encontro el usuario registrado en la base de datos.'
+            });
+        }
+        }
         } catch (e) {
             res.status(500).send({
-                message:'Ocurrió un error'
+                message:e.message
             });
             next(e);
         }
