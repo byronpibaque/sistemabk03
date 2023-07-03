@@ -297,15 +297,13 @@ export default {
             let Ffin = req.query.end;
             let cdf = req.query.codigoFarmacia
             let cdu = req.query.codigoUsuario
-           console.log(Finicio);
-           console.log(Ffin);
-            
+       
 
             const reg = await ctacobrar.aggregate(
             [ 
                 { $match:
                  { $and: [
-                     { estado: 0 },
+                    // { estado: 1 },
                   //   {codigoFarmacia:ObjectId1(cdf)},
                   { createdAt: { "$gte": new Date(Finicio), "$lt":new Date(Ffin) } }
                     ] }
