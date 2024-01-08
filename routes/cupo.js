@@ -9,6 +9,7 @@ const router=routerx();
 
 router.post('/add',cupoControl.add);
 router.get('/query',cupoControl.query);
+router.get('/filtro',cupoControl.filtro);
 router.get('/list',cupoControl.list);
 router.get('/existe',cupoControl.existeRegistro); 
 router.put('/update',cupoControl.update);

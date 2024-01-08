@@ -10,6 +10,7 @@ const router=routerx();
 router.post('/add',ctascobrarcontrol.add);
 router.get('/query',ctascobrarcontrol.query);
 router.get('/list',ctascobrarcontrol.list);
+router.post('/listxfiltro',ctascobrarcontrol.listxfiltro);
 router.get('/listporfechas',ctascobrarcontrol.listporFechas);
 router.get('/listporfechasad',ctascobrarcontrol.listporFechasAdmin);
 router.get('/listporcliente',ctascobrarcontrol.listporCliente);
